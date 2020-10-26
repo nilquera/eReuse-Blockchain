@@ -4,7 +4,7 @@ import "contracts/proofs/FunctionProofs.sol";
 import "contracts/proofs/TransferProofs.sol";
 import "contracts/proofs/RecycleProofs.sol";
 import "contracts/proofs/ReuseProofs.sol";
-import "contracts/proofs/ReportProofs.sol";
+import "contracts/proofs/StampProofs.sol";
 
 contract ProofsHandler {
     DataWipeProofs private dataWipeProofs;
@@ -12,7 +12,7 @@ contract ProofsHandler {
     TransferProofs private transferProofs;
     RecycleProofs private recycleProofs;
     ReuseProofs private reuseProofs;
-    ReportProofs private reportProofs;
+    StampProofs private stampProofs;
 
     constructor() public {}
 
@@ -38,8 +38,8 @@ contract ProofsHandler {
         reuseProofs = ReuseProofs(proofs);
     }
     
-    function setReportProofs(address proofs) public {
-        reportProofs = ReportProofs(proofs);
+    function setStampProofs(address proofs) public {
+        stampProofs = StampProofs(proofs);
     }    
 
     // -------------- GENERATORS FOR PROOFS --------------- //
@@ -151,8 +151,8 @@ contract ProofsHandler {
             keccak256(abi.encodePacked(expected));
     }
 
-    function generateReportProof(bytes32 hash) public {
-        reportProofs.setProof(hash);
+    function generateStampProof(uint256 id, bytes32 hash) public {
+        stampProofs.setProof(id, hash);
     }
 
     // -------------- GETTERS FOR PROOFS --------------- //

@@ -6,6 +6,7 @@ const TransferProofs = artifacts.require("TransferProofs");
 const ReuseProofs = artifacts.require("ReuseProofs");
 const RecycleProofs = artifacts.require("RecycleProofs");
 const FunctionProofs = artifacts.require("FunctionProofs");
+const StampProofs = artifacts.require("StampProofs");
 
 module.exports = async (deployer, network, accounts) => {
 
@@ -30,6 +31,10 @@ module.exports = async (deployer, network, accounts) => {
             await deployer.deploy(FunctionProofs, { from: accounts[0] })
                 .then(async function (proofs) {
                     await handler.setFunctionProofs(proofs.address);
+                });
+            await deployer.deploy(StampProofs, { from: accounts[0] })
+                .then(async function (proofs) {
+                    await handler.setStampProofs(proofs.address);
                 });
             await DAO.deployed()
                 .then(async function (dao) {
