@@ -36,11 +36,11 @@ contract DepositDevice is Ownable {
 
     // events ----------------------------------------------------------------
     event proofGenerated(bytes32 indexed proofHash);
-    event functionProof(bytes32 proofHash, address deviceAddress, uint256 score, uint256 diskUsage, string algorithmVersion);
+    event functionProof(bytes32 proofHash, address ownerAddress, address deviceAddress, uint256 score, uint256 diskUsage, string algorithmVersion);
     event transferProof(bytes32 proofHash, address deviceAddress, address supplier, address receiver);
     event dataWipeProof(bytes32 proofHash, address deviceAddress, string erasureType, string date, bool erasureResult);
     event reuseProof(bytes32 proofHash, address deviceAddress, string receiverSegment, string idReceipt, uint256 price);
-    event recycleProof(bytes32 proofHash, address deviceAddress, string collectionPoint, string date, string contact, string ticket, string gpsLocation, string recyclerCode);    
+    event recycleProof(bytes32 proofHash, address recyclerAddress, address deviceAddress, string date, string gpsLocation);    
 
     constructor(
         uint256 _uid,
@@ -125,7 +125,7 @@ contract DepositDevice is Ownable {
         );
         proofs["ProofFunction"].push(proofHash);
         emit proofGenerated(proofHash);
-        emit functionProof(proofHash, address(this), score, diskUsage, algorithmVersion);
+        emit functionProof(proofHash, this.owner(), address(this), score, diskUsage, algorithmVersion);
     }
 
     function getFunctionProof(bytes32 _hash)
@@ -250,7 +250,7 @@ contract DepositDevice is Ownable {
         );
         proofs["ProofRecycling"].push(proofHash);
         emit proofGenerated(proofHash);
-        emit recycleProof(proofHash, address(this), collectionPoint, date, contact, ticket, gpsLocation, recyclerCode);    
+        emit recycleProof(proofHash, this.owner(), address(this), date, gpsLocation);    
     }
 
     function getRecycleProof(bytes32 _hash)
