@@ -151,8 +151,8 @@ contract ProofsHandler {
             keccak256(abi.encodePacked(expected));
     }
 
-    function generateStampProof(uint256 id, bytes32 hash) public {
-        stampProofs.setProof(id, hash);
+    function generateStampProof(bytes32 hash) public {
+        stampProofs.setProof(hash);
     }
 
     // -------------- GETTERS FOR PROOFS --------------- //

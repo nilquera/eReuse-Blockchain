@@ -35,12 +35,12 @@ contract DepositDevice is Ownable {
     DevData data;
 
     // events ----------------------------------------------------------------
+    event functionProof(address userAddress, address deviceAddress, uint256 score, uint256 diskUsage, string algorithmVersion);
     event proofGenerated(bytes32 indexed proofHash);
-    event functionProof(bytes32 proofHash, address ownerAddress, address deviceAddress, uint256 score, uint256 diskUsage, string algorithmVersion);
-    event transferProof(bytes32 proofHash, address deviceAddress, address supplier, address receiver);
-    event dataWipeProof(bytes32 proofHash, address deviceAddress, string erasureType, string date, bool erasureResult);
-    event reuseProof(bytes32 proofHash, address deviceAddress, string receiverSegment, string idReceipt, uint256 price);
-    event recycleProof(bytes32 proofHash, address recyclerAddress, address deviceAddress, string date, string gpsLocation);    
+    event transferProof(address supplierAddress, address receiverAddress, address deviceAddress);
+    event dataWipeProof(address userAddress, address deviceAddress, string erasureType, bool erasureResult);
+    event reuseProof(address userAddress, address deviceAddress, string receiverSegment, string idReceipt, uint256 price);
+    event recycleProof(address userAddress, address deviceAddress, string date);    
 
     constructor(
         uint256 _uid,
@@ -125,7 +125,7 @@ contract DepositDevice is Ownable {
         );
         proofs["ProofFunction"].push(proofHash);
         emit proofGenerated(proofHash);
-        emit functionProof(proofHash, this.owner(), address(this), score, diskUsage, algorithmVersion);
+        emit functionProof(this.owner(), address(this), score, diskUsage, algorithmVersion);
     }
 
     function getFunctionProof(bytes32 _hash)
@@ -157,7 +157,7 @@ contract DepositDevice is Ownable {
         );
         proofs["ProofTransfer"].push(proofHash);
         emit proofGenerated(proofHash);
-        emit transferProof(proofHash, address(this), supplier, receiver);
+        emit transferProof(supplier, receiver, address(this));
     }
 
     function getTransferProof(bytes32 _hash)
@@ -189,7 +189,7 @@ contract DepositDevice is Ownable {
         );
         proofs["ProofDataWipe"].push(proofHash);
         emit proofGenerated(proofHash);
-        emit dataWipeProof(proofHash, address(this), erasureType, date, erasureResult);
+        emit dataWipeProof(proofAuthor, address(this), erasureType, erasureResult);
     }
 
     function getDataWipeProof(bytes32 _hash)
@@ -219,7 +219,7 @@ contract DepositDevice is Ownable {
         );
         proofs["ProofReuse"].push(proofHash);
         emit proofGenerated(proofHash);
-        emit reuseProof(proofHash, address(this), receiverSegment, idReceipt, price);
+        emit reuseProof(this.owner(), address(this), receiverSegment, idReceipt, price);
     }
 
     function getReuseProof(bytes32 _hash)
@@ -250,7 +250,7 @@ contract DepositDevice is Ownable {
         );
         proofs["ProofRecycling"].push(proofHash);
         emit proofGenerated(proofHash);
-        emit recycleProof(proofHash, this.owner(), address(this), date, gpsLocation);    
+        emit recycleProof(this.owner(), address(this), date);    
     }
 
     function getRecycleProof(bytes32 _hash)
